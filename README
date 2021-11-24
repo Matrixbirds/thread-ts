@@ -1,0 +1,12 @@
+# thread-ts
+
+### An experimental implementation mock thread with typescript.
+
+### install dependencies
+`yarn install`
+
+### run test
+`yarn test`
+
+### run build
+`yarn build`

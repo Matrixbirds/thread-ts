@@ -18,7 +18,7 @@ export abstract class BaseThread {
 
   private shouldYield() {
     if (this.frame.count > 0) {
-      this.frame.increment();
+      this.frame.decrement();
       return false;
     }
     return true;
@@ -30,18 +30,22 @@ export abstract class BaseThread {
   }
 
   async *[Symbol.asyncIterator]() {
-    while (this.running && !this.shouldYield()) {
+    let state = false
+    while (this.running && (state = !this.shouldYield())) {
       yield await this.run();
+    }
+    if (!state) {
+      this.stop();
+      return
     }
   }
 
   private async loop() {
-    if (!this.running) {
-      tearDownNextFrame()
-    }
     if (this.running) {
-      await this.schedule();
+      await this.schedule()
       requestNextFrame(() => this.loop())
+    } else {
+      tearDownNextFrame()
     }
   }
 

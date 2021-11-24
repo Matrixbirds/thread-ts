@@ -58,13 +58,8 @@ describe('AThread', () => {
     FakeVM.handleCall = (v: number) => {
       newArray.push(v)
       expect(v).toBe(res[count])
+      expect(newArray).toStrictEqual(res.slice(0, count+1))
       ++count
-      if (count === res.length) {
-        threadA.stop();
-        threadB.stop();
-        expect(newArray).toStrictEqual(res)
-        return;
-      }
     }
     threadA.start()
     threadB.start()
